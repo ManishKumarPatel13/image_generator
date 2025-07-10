@@ -3,10 +3,10 @@ services:
     name: ai-image-generator
     env: python
     plan: starter
-    buildCommand: pip install --upgrade pip && pip install -r requirements.txt
+    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
     startCommand: uvicorn api:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
-        value: 3.12.3
+        value: 3.11.9
       - key: HF_TOKEN
         sync: false  # This will be set manually in Render dashboard

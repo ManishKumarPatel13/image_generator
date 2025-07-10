@@ -87,6 +87,52 @@ curl -X POST "https://YOUR_RENDER_URL.onrender.com/generate-image" \
 2. **HF_TOKEN error**: Verify token is set correctly
 3. **Memory issues**: Use smaller models or upgrade plan
 4. **Timeout**: Image generation can take 30-60 seconds
+5. **Pillow build error**: Use requirements-minimal.txt instead
+
+### Pillow Build Error Fix:
+If you get a Pillow build error like "KeyError: '__version__'", try these solutions:
+
+#### Solution 1: Use Minimal Requirements
+Replace `requirements.txt` content with:
+```
+fastapi
+uvicorn[standard]
+huggingface_hub
+pillow
+python-dotenv
+pydantic
+```
+
+#### Solution 2: Update Build Command
+In Render dashboard or render.yaml:
+```bash
+pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
+```
+
+#### Solution 3: Force Python Version
+In render.yaml, set:
+```yaml
+envVars:
+  - key: PYTHON_VERSION
+    value: 3.11.9
+```
+
+### Memory Issues:
+- **Free Tier**: Limited memory, may fail on larger models
+- **Solution**: Use `runwayml/stable-diffusion-v1-5` (most memory efficient)
+- **Upgrade**: Consider Starter plan ($7/month) for better reliability
+
+### Deployment Verification:
+After deployment, test these endpoints:
+```bash
+# Health check
+curl https://your-app.onrender.com/health
+
+# Test image generation
+curl -X POST "https://your-app.onrender.com/generate-image" \
+     -H "Content-Type: application/json" \
+     -d '{"prompt": "test image", "model": "runwayml/stable-diffusion-v1-5"}'
+```
 
 ### Logs:
 Check Render Dashboard → Your Service → Logs for detailed error messages.

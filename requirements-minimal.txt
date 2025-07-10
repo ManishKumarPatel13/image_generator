@@ -1,0 +1,7 @@
+# Minimal requirements for Render deployment
+fastapi
+uvicorn[standard]
+huggingface_hub
+pillow
+python-dotenv
+pydantic
